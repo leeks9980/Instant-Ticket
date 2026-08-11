@@ -1,7 +1,6 @@
 import pyautogui
 import subprocess
 import time
-import matplotlib.pyplot as plt
 import random
 import math
 import os 
@@ -123,10 +122,30 @@ def  load_win():
     time.sleep(1.5)
     
     # 3. 윈도우 키 + 위쪽 방향키를 눌러 현재 활성화된(새로 뜬) 창을 최대화
-    pyautogui.hotkey('win', 'up')
+    #pyautogui.hotkey('win', 'up')
 
 #보안문자 해독
-def chptcha(img_path=r"D:\code\work_space\Instant Ticket\screenshot\CAPTCHA.png"):
+def chptcha(img_path=r"C:\work_space\code\instant_ticket\screenshot\CAPTCHA.png"):
+    img_transform = transforms.Compose([
+        transforms.Resize((32, 128), transforms.InterpolationMode.BICUBIC),
+        transforms.ToTensor(),
+        transforms.Normalize(0.5, 0.5) # 정규화
+    ])
+    
+    # 3. 테스트할 이미지 불러오기 및 변환
+    img = Image.open(img_path).convert('RGB')
+    img_tensor = img_transform(img).unsqueeze(0) # 배치 차원 추가
+    
+    # 4. 이미지 텍스트 판독 (추론)
+    with torch.inference_mode():
+        logits = parseq(img_tensor)
+        pred = logits.softmax(-1)
+        label, certainty = parseq.tokenizer.decode(pred)
+    
+    return label[0]
+
+#인원 대기
+def waiting(img_path=r"C:\work_space\code\instant_ticket\screenshot\CAPTCHA.png"):
     img_transform = transforms.Compose([
         transforms.Resize((32, 128), transforms.InterpolationMode.BICUBIC),
         transforms.ToTensor(),
