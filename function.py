@@ -145,27 +145,7 @@ def chptcha(img_path=r"C:\work_space\code\instant_ticket\screenshot\CAPTCHA.png"
     
     return label[0]
 
-#인원 대기
-def waiting(img_path=r"C:\work_space\code\instant_ticket\screenshot\CAPTCHA.png"):
-    img_transform = transforms.Compose([
-        transforms.Resize((32, 128), transforms.InterpolationMode.BICUBIC),
-        transforms.ToTensor(),
-        transforms.Normalize(0.5, 0.5) # 정규화
-    ])
-    
-    # 3. 테스트할 이미지 불러오기 및 변환
-    img = Image.open(img_path).convert('RGB')
-    img_tensor = img_transform(img).unsqueeze(0) # 배치 차원 추가
-    
-    # 4. 이미지 텍스트 판독 (추론)
-    with torch.inference_mode():
-        logits = parseq(img_tensor)
-        pred = logits.softmax(-1)
-        label, certainty = parseq.tokenizer.decode(pred)
-    
-    return label[0]
-
-def is_same_image(img_path1= r"D:\code\work_space\Instant Ticket\waiting_img\base_img.png", img_path2 = r"D:\code\work_space\Instant Ticket\waiting_img\taget_img.png" , threshold=5):
+def is_same_image(img_path1= r"C:\work_space\code\instant_ticket\waiting_img\base_img.png", img_path2 = r"C:\work_space\code\instant_ticket\waiting_img\taget_img.png" , threshold=5):
     # 1. 두 이미지 불러오기
     img1 = Image.open(img_path1)
     img2 = Image.open(img_path2)
@@ -180,4 +160,4 @@ def is_same_image(img_path1= r"D:\code\work_space\Instant Ticket\waiting_img\bas
     
     # 4. 차이가 임계값(threshold) 이하이면 같은 이미지로 판단
     # 보통 5 이하이면 매우 유사하거나 같은 이미지로 판정함
-    return diff <= threshold
+    return diff
