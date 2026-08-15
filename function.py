@@ -10,6 +10,7 @@ import torch
 from PIL import Image
 from torchvision import transforms
 import imagehash
+import config
 
 pyautogui.PAUSE = 0
 parseq = torch.hub.load('baudm/parseq', 'parseq', pretrained=True).eval()
@@ -111,22 +112,9 @@ def screenshot_by_ratio(save_path, filename, start_x_ratio, start_y_ratio, width
     # 4. 합쳐진 전체 경로(full_file_path)로 스크린샷 저장
     pyautogui.screenshot(full_file_path, region=(start_x, start_y, capture_width, capture_height))
 
-#창 로드
-def  load_win():
-    chrome_path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
-    url = "https://www.ticketlink.co.kr/sports"
-    
-    # 새 창으로 크롬 실행
-    subprocess.Popen([chrome_path, "--new-window", url])
-    
-    # 2. 창이 열리고 화면에 뜰 때까지 잠시 대기 (컴퓨터 속도에 따라 1~2초 조절)
-    time.sleep(1.5)
-    
-    # 3. 윈도우 키 + 위쪽 방향키를 눌러 현재 활성화된(새로 뜬) 창을 최대화
-    #pyautogui.hotkey('win', 'up')
 
 #보안문자 해독
-def chptcha(img_path=r"C:\work_space\code\instant_ticket\screenshot\CAPTCHA.png"):
+def chptcha(img_path=r".\work_space\Instant Ticket\screenshot\CAPTCHA.png"):
     img_transform = transforms.Compose([
         transforms.Resize((32, 128), transforms.InterpolationMode.BICUBIC),
         transforms.ToTensor(),
@@ -145,7 +133,8 @@ def chptcha(img_path=r"C:\work_space\code\instant_ticket\screenshot\CAPTCHA.png"
     
     return label[0]
 
-def is_same_image(img_path1= r"C:\work_space\code\instant_ticket\waiting_img\base_img.png", img_path2 = r"C:\work_space\code\instant_ticket\waiting_img\taget_img.png" , threshold=5):
+#같은 화면 검사
+def is_same_image(img_path1= r".\work_space\Instant Ticket\waiting_img\base_img.png", img_path2 = r".\Work_space\Instant Ticket\waiting_img\taget_img.png" , threshold=5):
     # 1. 두 이미지 불러오기
     img1 = Image.open(img_path1)
     img2 = Image.open(img_path2)
@@ -161,3 +150,108 @@ def is_same_image(img_path1= r"C:\work_space\code\instant_ticket\waiting_img\bas
     # 4. 차이가 임계값(threshold) 이하이면 같은 이미지로 판단
     # 보통 5 이하이면 매우 유사하거나 같은 이미지로 판정함
     return diff
+
+#경기 선택
+def Select_Match():
+    move_mouse_curved_fast(0.038, 0.034, duration=0.1)
+    pyautogui.click()
+    time.sleep(1)
+
+    if config.team == '한화':
+        move_mouse_curved_fast(0.71, 0.83, duration=0.1)
+        pyautogui.click()
+
+        move_mouse_curved_fast(0.038, 0.4, duration=0.1)
+        pyautogui.click()
+        pyautogui.keyUp('ctrl')
+        pyautogui.scroll(-1400)
+        time.sleep(0.2)
+
+        move_mouse_curved_fast(0.31+(config.Match_X*0.06), 0.1+(config.Match_y*0.12), duration=0.1)   #기준 시작점
+        time.sleep(0.1)
+        pyautogui.click()
+
+        move_mouse_curved_fast(0.547, 0.64, duration=0.2)
+        pyautogui.click()
+        time.sleep(1)
+
+    elif config.team == '기아':
+        move_mouse_curved_fast(0.038, 0.4, duration=0.1)
+        pyautogui.click()
+        pyautogui.keyUp('ctrl')
+        pyautogui.scroll(-1600)
+        time.sleep(0.2)
+
+        move_mouse_curved_fast(0.71, 0.07, duration=0.1)
+        pyautogui.click()
+        
+        move_mouse_curved_fast(0.30+(config.Match_X*0.065), 0.15+(config.Match_y*0.12), duration=0.2)   #기준 시작점
+        time.sleep(0.1)
+        pyautogui.click()
+
+        move_mouse_curved_fast(0.55, 0.59, duration=0.2)
+        pyautogui.click()
+        time.sleep(1)
+
+#좌석 지정
+def Seat_Selection():
+    print(config.team, config.seat)
+    if config.team == '한화':
+        #중앙 테이블
+        if config.seat == "중앙":
+            print(config.seat)
+            move_mouse_curved_fast(0.145, 0.5, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+        #3루 응원석
+        elif config.seat == "3루 응원":
+            print(config.seat)
+            move_mouse_curved_fast(0.108, 0.392, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+        #3루 지정석
+        elif config.seat == "3루":
+            print(config.seat)
+            move_mouse_curved_fast(0.12, 0.45, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+        #1루 응원석
+        elif config.seat == "1루 응원":
+            print(config.seat)
+            move_mouse_curved_fast(0.186, 0.4, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+        #1루 지정석
+        elif config.seat == "1루":
+            print(config.seat)
+            move_mouse_curved_fast(0.183, 0.45, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+        move_mouse_curved_fast(0.145, 0.38, duration=0.5)
+        time.sleep(0.1)
+        pyautogui.click()
+        
+        move_mouse_curved_fast(0.23, 0.15, duration=0.5)
+        time.sleep(0.1)
+        pyautogui.click()
+        move_mouse_curved_fast(0.15, 0.5, duration=0.5)
+
+    elif config.team == '기아':
+        #중앙 테이블
+        if config.seat == "중앙":
+            print(config.seat)
+            move_mouse_curved_fast(0.145, 0.49, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+            move_mouse_curved_fast(0.145, 0.41, duration=0.5)
+            time.sleep(0.1)
+            pyautogui.click()
+
+            move_mouse_curved_fast(0.15, 0.5, duration=0.5)
+
