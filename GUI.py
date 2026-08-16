@@ -28,9 +28,7 @@ def run_process(team: str, seat: str, year: str,
     row, col = selected_cell
     print(row, col)
     config.update_settings(team,col,row+1,seat,year,month,day)
-
-    print("--- [디버그] 설정 업데이트 완료 ---")
-    print('GUI 부분 문재',config.team, config.Match_X, config.Match_y, config.seat, config.year, config.month, config.day )
+    print('GUI 부분',config.team, config.Match_X, config.Match_y, config.seat, config.year, config.month, config.day )
     main.main_process()
     
     # 테스트용 오류: 아래 주석 해제 시 오류 화면으로 전환
